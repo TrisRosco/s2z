@@ -17,6 +17,12 @@ body{
 #table {
     text-align: center;
 }
+
+#add-line-button {
+    margin: 10px;
+    width: 190px;
+}
+
 .selector{
     width : 300px;
 }

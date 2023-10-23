@@ -13,22 +13,21 @@ import {
   TextField,
   IconButton,
   Paper,
-  Stack,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { DateField } from "@mui/x-date-pickers/DateField";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 
 function ParamInput() {
   const [lineCount, setLineCount] = useState(1);
-  const [lines, setLines] = useState([{ id: 1, monthYear: "", numTrees: "" }]);
+  const [lines, setLines] = useState([{ id: 1, monthYear: null, numTrees: "" }]);
 
   const handleAddLine = () => {
     const newLineCount = lineCount + 1;
     setLineCount(newLineCount);
-    setLines([...lines, { id: newLineCount, monthYear: "", numTrees: "" }]);
+    setLines([...lines, { id: newLineCount, monthYear: null, numTrees: "" }]);
   };
 
   const handleDeleteLine = (id) => {
@@ -43,6 +42,7 @@ function ParamInput() {
     setLines(updatedLines);
   };
 
+
   const renderLines = () => {
     return lines.map((line) => (
       <div key={line.id}>
@@ -51,8 +51,11 @@ function ParamInput() {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateField
               label="Month & Year"
-              format="MM-YYYY"
+              value={line.monthYear}
               variant="standard"
+              format="MM/YYYY"
+              onChange={(date) => handleLineChange(line.id, "monthYear", date)}
+              renderInput={(params) => <TextField {...params} variant="standard" />}
             />
           </LocalizationProvider>
           <TextField
@@ -60,14 +63,9 @@ function ParamInput() {
             label="Number of Trees"
             variant="standard"
             value={line.numTrees}
-            onChange={(e) =>
-              handleLineChange(line.id, "numTrees", e.target.value)
-            }
+            onChange={(e) => handleLineChange(line.id, "numTrees", e.target.value)}
           />
-          <IconButton
-            aria-label="delete"
-            onClick={() => handleDeleteLine(line.id)}
-          >
+          <IconButton aria-label="delete" onClick={() => handleDeleteLine(line.id)}>
             <DeleteIcon />
           </IconButton>
         </ListItem>
@@ -91,14 +89,15 @@ function ParamInput() {
           <InputLabel>Frequency</InputLabel>
           <Select className="selector" label="Frequency">
             <MenuItem value={0}>Weekly</MenuItem>
-            <MenuItem value={0}>Monthly</MenuItem>
-            <MenuItem value={0}>Annually</MenuItem>
+            <MenuItem value={1}>Monthly</MenuItem>
+            <MenuItem value={2}>Annually</MenuItem>
           </Select>
         </FormControl>
       </Paper>
       <Table>{renderLines()}</Table>
-      <Stack className="param-input-buttons">
+
         <Button
+          id="add-line-button"
           color="primary"
           startIcon={<AddIcon />}
           variant="contained"
@@ -106,7 +105,7 @@ function ParamInput() {
         >
           <span>Add line</span>
         </Button>
-      </Stack>
+
     </Paper>
   );
 }

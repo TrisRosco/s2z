@@ -1,17 +1,17 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from "react";
 
 const Graph = ({ data, width, height }) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
 
     // Clear the canvas
     ctx.clearRect(0, 0, width, height);
 
     // Set styles
-    ctx.strokeStyle = '#5da694';
+    ctx.strokeStyle = "#5da694";
     ctx.lineWidth = 4;
 
     // Draw the graph
@@ -27,15 +27,15 @@ const Graph = ({ data, width, height }) => {
     ctx.stroke();
 
     // Add axis labels
-    ctx.fillStyle = 'black';
-    ctx.font = '12px Arial';
+    ctx.fillStyle = "black";
+    ctx.font = "12px Arial";
     // X-axis label
-    ctx.fillText('Time', width / 2, height - 10);
+    ctx.fillText("Time", width / 2, height - 10);
     // Y-axis label
     ctx.save();
     ctx.translate(10, height / 2);
     ctx.rotate(-Math.PI / 2);
-    ctx.fillText('kgCo2', 0, 0);
+    ctx.fillText("kgCo2", 0, 0);
     ctx.restore();
   }, [data, width, height]);
 
@@ -43,4 +43,3 @@ const Graph = ({ data, width, height }) => {
 };
 
 export default Graph;
-

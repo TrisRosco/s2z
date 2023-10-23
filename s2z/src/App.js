@@ -1,7 +1,8 @@
 import "./App.css";
 import React, { useState } from "react";
 import ParamInput from "./Components/ParamInput";
-import Graph from "./Components/Graph";
+// import Graph from "./Components/Graph";
+import { LineChart, Line, CartesianGrid, XAxis, YAxis } from "recharts";
 import { createTheme, Paper, ThemeProvider } from "@mui/material";
 import Button from "@mui/material/Button";
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
@@ -24,13 +25,12 @@ const theme = createTheme({
 });
 
 function App() {
-  const [data, setData] = useState([20, 50, 30, 70, 60, 90, 20]); // Placeholder data
-  const width = 500;
-  const height = 200;
-
-  const updateData = (newData) => {
-    setData(newData);
-  };
+  const [data, setData] = useState([
+    { date: "05/2021", trees: 400 },
+    { date: "06/2021", trees: 500 },
+    { date: "07/2021", trees: 300 },
+    { date: "08/2021", trees: 600 },
+  ]);
 
   return (
     <div className="App">
@@ -38,17 +38,22 @@ function App() {
         <header className="App-header">
           <h2>Carbon Offset Simulator</h2>
         </header>
-        <ParamInput updateData={updateData} />
+        <ParamInput />
         <Button
           color="secondary"
           startIcon={<AutoGraphIcon />}
           variant="contained"
-          onClick={() => console.log("Generating graph")} // placeholder
+          onClick={() => console.log("Generating graph")} //
         >
           <span>Generate Graph</span>
         </Button>
         <Paper elevation={3}>
-          <Graph data={data} width={width} height={height} />
+          <LineChart width={400} height={400} data={data}>
+            <Line type="monotone" dataKey="trees" stroke="#8884d8" />
+            <XAxis dataKey="date" />
+            <YAxis />
+          </LineChart>
+          {/* <Graph data={data} width={width} height={height} /> */}
         </Paper>
       </ThemeProvider>
     </div>
