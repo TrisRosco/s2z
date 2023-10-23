@@ -18,11 +18,27 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { DateField } from "@mui/x-date-pickers/DateField";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import AutoGraphIcon from "@mui/icons-material/AutoGraph";
+import Graph from "../Graph";
 
 function ParamInput() {
   const [lineCount, setLineCount] = useState(1);
-  const [lines, setLines] = useState([{ id: 1, monthYear: null, numTrees: "" }]);
+  const [lines, setLines] = useState([
+    { id: 1, monthYear: null, numTrees: "" },
+  ]);
+
+  const [data, setData] = useState([
+    { date: "05/2021", trees: 400 },
+    { date: "06/2021", trees: 500 },
+    { date: "07/2021", trees: 300 },
+    { date: "08/2021", trees: 600 },
+  ]);
+
+  // set data to whatever is passed in from the input fields
+  const handleSetData = (data) => {
+    setData(data);
+    };
 
   const handleAddLine = () => {
     const newLineCount = lineCount + 1;
@@ -42,7 +58,6 @@ function ParamInput() {
     setLines(updatedLines);
   };
 
-
   const renderLines = () => {
     return lines.map((line) => (
       <div key={line.id}>
@@ -55,17 +70,24 @@ function ParamInput() {
               variant="standard"
               format="MM/YYYY"
               onChange={(date) => handleLineChange(line.id, "monthYear", date)}
-              renderInput={(params) => <TextField {...params} variant="standard" />}
+              renderInput={(params) => (
+                <TextField {...params} variant="standard" />
+              )}
             />
           </LocalizationProvider>
           <TextField
-            id={`num-trees-${line.id}`}
+            id={`num-trees-${line.id}`} 
             label="Number of Trees"
             variant="standard"
             value={line.numTrees}
-            onChange={(e) => handleLineChange(line.id, "numTrees", e.target.value)}
+            onChange={(e) =>
+              handleLineChange(line.id, "numTrees", e.target.value)
+            }
           />
-          <IconButton aria-label="delete" onClick={() => handleDeleteLine(line.id)}>
+          <IconButton
+            aria-label="delete"
+            onClick={() => handleDeleteLine(line.id)}
+          >
             <DeleteIcon />
           </IconButton>
         </ListItem>
@@ -75,6 +97,7 @@ function ParamInput() {
   };
 
   return (
+    <>
     <Paper elevation={3} className="param-input">
       <Paper elevation={3} className="param-input-header">
         <FormControl variant="filled">
@@ -95,18 +118,26 @@ function ParamInput() {
         </FormControl>
       </Paper>
       <Table>{renderLines()}</Table>
-
-        <Button
-          id="add-line-button"
-          color="primary"
-          startIcon={<AddIcon />}
+      <Button
+        id="add-line-button"
+        color="primary"
+        startIcon={<AddIcon />}
+        variant="contained"
+        onClick={handleAddLine}
+      >
+        <span>Add line</span>
+      </Button>
+      <Button
+          color="secondary"
+          startIcon={<AutoGraphIcon />}
           variant="contained"
-          onClick={handleAddLine}
+          onClick={() => console.log("Generating graph")} //
         >
-          <span>Add line</span>
+          <span>Generate Graph</span>
         </Button>
-
     </Paper>
+      <Graph data={data} />
+    </>
   );
 }
 
