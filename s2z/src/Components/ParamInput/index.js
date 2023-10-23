@@ -19,6 +19,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { DateField } from "@mui/x-date-pickers/DateField";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import utc from 'dayjs/plugin/utc'
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 import Graph from "../Graph";
 
@@ -36,9 +37,21 @@ function ParamInput() {
   ]);
 
   // set data to whatever is passed in from the input fields
-  const handleSetData = (data) => {
-    setData(data);
-    };
+  const processData = () => {
+    const newData = [];
+    lines.forEach((line) => {
+      if (line.monthYear && line.numTrees) {
+        const month = line.monthYear;
+        const year = line.monthYear;
+        const date = `${month}/${year}`;
+        const trees = line.numTrees;
+        newData.push({ date, trees });
+        console.log(date, trees);
+      }
+    });
+
+    setData(newData);
+  };
 
   const handleAddLine = () => {
     const newLineCount = lineCount + 1;
@@ -76,7 +89,7 @@ function ParamInput() {
             />
           </LocalizationProvider>
           <TextField
-            id={`num-trees-${line.id}`} 
+            id={`num-trees-${line.id}`}
             label="Number of Trees"
             variant="standard"
             value={line.numTrees}
@@ -98,44 +111,44 @@ function ParamInput() {
 
   return (
     <>
-    <Paper elevation={3} className="param-input">
-      <Paper elevation={3} className="param-input-header">
-        <FormControl variant="filled">
-          <InputLabel>Country</InputLabel>
-          <Select className="selector" label="Country">
-            <MenuItem value={15.52}>United States</MenuItem>
-            <MenuItem value={5.55}>United Kingdom</MenuItem>
-            <MenuItem value={9.44}>Germany</MenuItem>
-          </Select>
-        </FormControl>
-        <FormControl variant="filled">
-          <InputLabel>Frequency</InputLabel>
-          <Select className="selector" label="Frequency">
-            <MenuItem value={0}>Weekly</MenuItem>
-            <MenuItem value={1}>Monthly</MenuItem>
-            <MenuItem value={2}>Annually</MenuItem>
-          </Select>
-        </FormControl>
-      </Paper>
-      <Table>{renderLines()}</Table>
-      <Button
-        id="add-line-button"
-        color="primary"
-        startIcon={<AddIcon />}
-        variant="contained"
-        onClick={handleAddLine}
-      >
-        <span>Add line</span>
-      </Button>
-      <Button
+      <Paper elevation={3} className="param-input">
+        <Paper elevation={3} className="param-input-header">
+          <FormControl variant="filled">
+            <InputLabel>Country</InputLabel>
+            <Select className="selector" label="Country">
+              <MenuItem value={15.52}>United States</MenuItem>
+              <MenuItem value={5.55}>United Kingdom</MenuItem>
+              <MenuItem value={9.44}>Germany</MenuItem>
+            </Select>
+          </FormControl>
+          <FormControl variant="filled">
+            <InputLabel>Frequency</InputLabel>
+            <Select className="selector" label="Frequency">
+              <MenuItem value={0}>Weekly</MenuItem>
+              <MenuItem value={1}>Monthly</MenuItem>
+              <MenuItem value={2}>Annually</MenuItem>
+            </Select>
+          </FormControl>
+        </Paper>
+        <Table>{renderLines()}</Table>
+        <Button
+          id="add-line-button"
+          color="primary"
+          startIcon={<AddIcon />}
+          variant="contained"
+          onClick={handleAddLine}
+        >
+          <span>Add line</span>
+        </Button>
+        <Button
           color="secondary"
           startIcon={<AutoGraphIcon />}
           variant="contained"
-          onClick={() => console.log("Generating graph")} //
+          onClick={processData}
         >
-          <span>Generate Graph</span>
+          <span>Update Graph</span>
         </Button>
-    </Paper>
+      </Paper>
       <Graph data={data} />
     </>
   );
