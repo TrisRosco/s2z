@@ -6,7 +6,7 @@ import {
   MenuItem,
   FormControl,
   Select,
-  List,
+  Table,
   ListItem,
   ListItemText,
   Divider,
@@ -31,8 +31,16 @@ function ParamInput() {
         <div key={i}>
           <ListItem>
             <ListItemText primary={i} />
-            <TextField id={`month-year-${i}`} label="Month & Year" variant="standard" />
-            <TextField id={`num-trees-${i}`} label="Number of Trees" variant="standard" />
+            <TextField
+              id={`month-year-${i}`}
+              label="Month & Year"
+              variant="standard"
+            />
+            <TextField
+              id={`num-trees-${i}`}
+              label="Number of Trees"
+              variant="standard"
+            />
             <IconButton aria-label="delete">
               <DeleteIcon />
             </IconButton>
@@ -57,7 +65,7 @@ function ParamInput() {
         </FormControl>
         <FormControl>
           <InputLabel>Frequency</InputLabel>
-          <Select  label="Frequency">
+          <Select className="selector" label="Frequency">
             <MenuItem value={0}>Weekly</MenuItem>
             <MenuItem value={0}>Monthly</MenuItem>
             <MenuItem value={0}>Annually</MenuItem>
@@ -65,7 +73,7 @@ function ParamInput() {
         </FormControl>
       </Paper>
       <div className="param-input-grid">
-        <List>{renderLines()}</List>
+        <Table>{renderLines()}</Table>
         <Button
           color="secondary"
           startIcon={<AddIcon />}
