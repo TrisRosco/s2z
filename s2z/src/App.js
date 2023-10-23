@@ -1,5 +1,6 @@
 import './App.css';
-import Button from '@mui/material/Button';
+import SignIn from './Components/SignIn';
+
 
 
 function App() {
@@ -7,6 +8,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h2>Carbon Offset Simulator</h2>
+        <SignIn />
       </header>
     </div>
   );
