@@ -13,7 +13,6 @@ body{
     justify-content: center;
 }
 
-#country-select{
-    width: 200px;
-
+.selector{
+    width : 100%;
 }
