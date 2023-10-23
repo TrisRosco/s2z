@@ -17,7 +17,6 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
-import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 import { DateField } from "@mui/x-date-pickers/DateField";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -78,7 +77,7 @@ function ParamInput() {
   };
 
   return (
-    <Paper elevation={10} className="param-input">
+    <Paper elevation={3} className="param-input">
       <Paper elevation={3} className="param-input-header">
         <FormControl variant="filled">
           <InputLabel>Country</InputLabel>
@@ -106,14 +105,6 @@ function ParamInput() {
           onClick={handleAddLine}
         >
           <span>Add line</span>
-        </Button>
-        <Button
-          color="secondary"
-          startIcon={<AutoGraphIcon />}
-          variant="contained"
-          onClick={console.log("Generate Graph")}
-        >
-          <span>Generate Graph</span>
         </Button>
       </Stack>
     </Paper>

@@ -1,7 +1,10 @@
 import "./App.css";
+import React, { useState } from "react";
 import ParamInput from "./Components/ParamInput";
 import Graph from "./Components/Graph";
-import { createTheme, ThemeProvider } from "@mui/material";
+import { createTheme, Paper, ThemeProvider } from "@mui/material";
+import Button from "@mui/material/Button";
+import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 
 const theme = createTheme({
   palette: {
@@ -21,18 +24,32 @@ const theme = createTheme({
 });
 
 function App() {
-  const data = [20, 50, 30, 70, 60, 90]; // Placeholder data
-  const width = 400;
+  const [data, setData] = useState([20, 50, 30, 70, 60, 90, 20]); // Placeholder data
+  const width = 500;
   const height = 200;
+
+  const updateData = (newData) => {
+    setData(newData);
+  };
 
   return (
     <div className="App">
       <ThemeProvider theme={theme}>
         <header className="App-header">
           <h2>Carbon Offset Simulator</h2>
-          <ParamInput label="Miles Driven" type="number" value="0" />
-          <Graph data={data} width={width} height={height} />
         </header>
+        <ParamInput updateData={updateData} />
+        <Button
+          color="secondary"
+          startIcon={<AutoGraphIcon />}
+          variant="contained"
+          onClick={() => console.log("Generating graph")} // placeholder
+        >
+          <span>Generate Graph</span>
+        </Button>
+        <Paper elevation={3}>
+          <Graph data={data} width={width} height={height} />
+        </Paper>
       </ThemeProvider>
     </div>
   );
