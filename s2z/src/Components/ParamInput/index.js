@@ -43,12 +43,13 @@ function ParamInput() {
 
   const processData = () => {
     const newData = [];
+    let carbonFootprint = 0;
     lines.forEach((line) => {
       if (line.monthYear && line.numTrees) {
         const date = line.monthYear;
         const trees = (line.numTrees * 1.814).toFixed(2);
-        newData.push({ date, trees });
-        console.log(date, trees);
+        carbonFootprint += parseFloat(trees);
+        newData.push({ date, trees: carbonFootprint });
       }
     });
     setData(newData);
@@ -89,7 +90,6 @@ function ParamInput() {
     });
     setTotalTrees(total);
   };
-
 
   const handleLineChange = (id, key, value) => {
     const updatedLines = lines.map((line) =>
@@ -175,7 +175,7 @@ function ParamInput() {
           id="add-line-button"
           color="primary"
           startIcon={<AddIcon />}
-          variant="contained"
+          variant="outlined"
           onClick={handleAddLine}
         >
           <span>Add line</span>
@@ -189,7 +189,12 @@ function ParamInput() {
           <span>Update Graph</span>
         </Button>
       </Paper>
-      <Graph data={data} />{" "}
+      <Paper elevation={3} className="graph-container">
+        <Typography variant="h5" id="graph-title">
+          Your Carbon Footprint
+        </Typography>
+        <Graph data={data} />{" "}
+      </Paper>
       <Paper elevation={3} className="flavour-text-container">
         <Typography variant="p" id="flavour-text">
           Total number of trees: <span id="emphasis"> {totalTrees} </span>
