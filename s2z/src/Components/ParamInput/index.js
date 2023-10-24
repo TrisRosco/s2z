@@ -23,8 +23,9 @@ import { ThemeProvider } from "@emotion/react";
 
 function ParamInput() {
   const [lineCount, setLineCount] = useState(1);
-  const [totalTrees, setTotalTrees] = useState(0);
+  const [totalTrees, setTotalTrees] = useState(2);
   const [selectedCountry, setSelectedCountry] = useState(15.52);
+  const [selectedFrequency, setSelectedFrequency] = useState("Anually");
   const [lines, setLines] = useState([
     { id: 1, monthYear: null, numTrees: "" },
   ]);
@@ -93,6 +94,11 @@ function ParamInput() {
     console.log(e.target.value);
   };
 
+  const handleSelectFrequency = (e) => {
+    setSelectedFrequency(e.target.value);
+    console.log(e.target.value);
+  };
+
   const renderLines = () => {
     return lines.map((line) => (
       <div key={line.id}>
@@ -145,8 +151,8 @@ function ParamInput() {
 
   return (
     <>
-      <Paper elevation={3} className="param-input">
-        <Paper elevation={3} className="param-input-header">
+      <Paper elevation={3}>
+        <Paper elevation={3}>
           <FormControl variant="filled">
             <InputLabel>Country</InputLabel>
             <Select
@@ -164,9 +170,13 @@ function ParamInput() {
               <MenuItem value={1710}>Australia</MenuItem>
             </Select>
           </FormControl>
-          <FormControl variant="filled" >
+          <FormControl variant="filled">
             <InputLabel>Frequency</InputLabel>
-            <Select className="selector" label="Frequency">
+            <Select
+              className="selector"
+              label="Frequency"
+              onChange={handleSelectFrequency}
+            >
               <MenuItem value={0}>Weekly</MenuItem>
               <MenuItem value={1}>Monthly</MenuItem>
               <MenuItem value={2}>Annually</MenuItem>
@@ -195,18 +205,16 @@ function ParamInput() {
       <Typography variant="h4" className="subtitle">
         Your Carbon Offset Progress
       </Typography>
-      <Paper elevation={3} className="graph-container">
+      <Paper elevation={3}>
         <Graph data={data} average={selectedCountry} />
       </Paper>
-      <Typography variant="h4">
-        Facts and Figures
-      </Typography>
-      <Paper elevation={3} className="flavour-text-container">
-        <Typography variant="p" id="flavour-text">
+      <Typography variant="h4">Facts and Figures</Typography>
+      <Paper elevation={3}>
+        <Typography variant="body1" id="flavour-text">
           Total number of trees: <span id="emphasis"> {totalTrees} </span>
           <br />
         </Typography>
-        <Typography variant="p" id="flavour-text">
+        <Typography variant="body1" id="flavour-text">
           It will take{" "}
           <span id="emphasis"> ${totalTrees * 120 + totalTrees * 12} </span> to
           offset your carbon footprint
@@ -217,14 +225,14 @@ function ParamInput() {
           Maintenance costs at $12 per tree:{" "}
           <span id="emphasis"> ${totalTrees * 12} </span>
         </Typography>
-        <Typography variant="p" id="flavour-text">
+        <Typography variant="body1" id="flavour-text">
           <br />
-          Average carbon footprint for your country:{" "}
-          <span id="emphasis"> {selectedCountry}</span>kgCO2 per person per year
+          Average person's carbon footprint for your country:{" "}
+          <span id="emphasis"> {selectedCountry}</span>kgCO per year
           <br />
           It will take a total of
           <span id="emphasis"> {Math.ceil(selectedCountry / 28.5)} </span> trees
-          to offset your carbon footprint
+          to offset carbon emissions for one person
         </Typography>
       </Paper>
     </>
