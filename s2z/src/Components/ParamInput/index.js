@@ -206,6 +206,8 @@ function ParamInput() {
               className="selector"
               label="Frequency"
               onChange={handleSelectFrequency}
+              defaultValue={1}
+              
             >
               {/* disabled weekly option for now */}
               {/* <MenuItem value={0}>Weekly</MenuItem> */}
