@@ -24,7 +24,7 @@ function ParamInput() {
   const [lineCount, setLineCount] = useState(1);
   const [totalTrees, setTotalTrees] = useState(2);
   const [selectedCountry, setSelectedCountry] = useState(15.52);
-  const [selectedFrequency, setSelectedFrequency] = useState(2);
+  const [selectedFrequency, setSelectedFrequency] = useState(1);
   const [lines, setLines] = useState([
     { id: 1, monthYear: null, numTrees: "" },
   ]);
@@ -46,10 +46,17 @@ function ParamInput() {
     handleTotalTrees();
   };
 
-  // valid date mm/yy
   const validateDate = (date) => {
-    const dateRegex = /^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/;
-    return dateRegex.test(date);
+    if (date === null) {
+      return true;
+    }
+    if (selectedFrequency === 0) {
+      return /^\d{2}\/\d{2}\/\d{2}$/.test(date);
+    } else if (selectedFrequency === 1) {
+      return /^\d{2}\/\d{2}$/.test(date);
+    } else if (selectedFrequency === 2) {
+      return /^\d{2}$/.test(date);
+    }
   };
 
   const handleAddLine = () => {
