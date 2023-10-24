@@ -52,9 +52,7 @@ function ParamInput() {
     const newData = [];
     lines.forEach((line) => {
       if (line.monthYear && line.numTrees) {
-        const month = line.monthYear;
-        const year = line.monthYear
-        const date = `${month}/${year}`;
+        const date = line.monthYear;
         const trees = (line.numTrees * 1.814).toFixed(2);
         newData.push({ date, trees });
         console.log(date, trees);
@@ -94,18 +92,15 @@ function ParamInput() {
       <div key={line.id}>
         <ListItem>
           <ListItemText primary={line.id} />
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateField
-              label="Month & Year"
-              value={line.monthYear}
-              variant="standard"
-              format="MM/YYYY"
-              onChange={(date) => handleLineChange(line.id, "monthYear", date)}
-              renderInput={(params) => (
-                <TextField {...params} variant="standard" />
-              )}
-            />
-          </LocalizationProvider>
+          <TextField
+            id={`month-year-${line.id}`}
+            label="Month & Year"
+            variant="standard"
+            value={line.monthYear}
+            onChange={(e) =>
+              handleLineChange(line.id, "monthYear", e.target.value)
+            }
+          />
           <TextField
             id={`num-trees-${line.id}`}
             label="Number of Trees"
