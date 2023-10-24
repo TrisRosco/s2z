@@ -23,23 +23,12 @@ import Graph from "../Graph";
 function ParamInput() {
   const [lineCount, setLineCount] = useState(1);
   const [totalTrees, setTotalTrees] = useState(0);
+  const [selectedCountry, setSelectedCountry] = useState(15.52);
   const [lines, setLines] = useState([
     { id: 1, monthYear: null, numTrees: "" },
   ]);
 
   const [data, setData] = useState([]);
-
-  // Maths
-  // On average, a fully grown tree can absorb approximately 48 pounds (21.77 kilograms) of CO2 per year. However, this number can vary significantly.
-  // for each tree in the data, multiply the number of trees by 48 to get the amount of CO2 absorbed per year
-
-  // 1 tree = 21.77 kilograms of CO2 per year
-  // 21.77 / 12 = 1.814
-  // 1 tree = 1.814 kilograms of CO2 per month
-  // 1.814 / 30 = 0.06046
-  // 1 tree = 0.06046 kilograms of CO2 per day
-  // 0.06046 * 7 = 0.42322
-  // 1 tree = 0.42322 kilograms of CO2 per week
 
   const processData = () => {
     const newData = [];
@@ -47,7 +36,7 @@ function ParamInput() {
     lines.forEach((line) => {
       if (line.monthYear && line.numTrees) {
         const date = line.monthYear;
-        const trees = (line.numTrees * 1.814).toFixed(2);
+        const trees = (line.numTrees * 28.5).toFixed(2);
         carbonFootprint += parseFloat(trees);
         newData.push({ date, trees: carbonFootprint });
       }
@@ -98,6 +87,11 @@ function ParamInput() {
     setLines(updatedLines);
   };
 
+  const handleSelectCountry = (e) => {
+    setSelectedCountry(e.target.value);
+    console.log(e.target.value);
+  };
+
   const renderLines = () => {
     return lines.map((line) => (
       <div key={line.id}>
@@ -125,7 +119,6 @@ function ParamInput() {
               handleLineChange(line.id, "monthYear", e.target.value)
             }
           />
-
           <TextField
             id={`num-trees-${line.id}`}
             label="Number of Trees"
@@ -155,10 +148,14 @@ function ParamInput() {
         <Paper elevation={3} className="param-input-header">
           <FormControl variant="filled">
             <InputLabel>Country</InputLabel>
-            <Select className="selector" label="Country">
-              <MenuItem value={15.52}>United States</MenuItem>
-              <MenuItem value={5.55}>United Kingdom</MenuItem>
-              <MenuItem value={9.44}>Germany</MenuItem>
+            <Select
+              className="selector"
+              label="Country"
+              onChange={handleSelectCountry}
+            >
+              <MenuItem value={1552}>United States</MenuItem>
+              <MenuItem value={555}>United Kingdom</MenuItem>
+              <MenuItem value={944}>Germany</MenuItem>
             </Select>
           </FormControl>
           <FormControl variant="filled">
@@ -193,7 +190,7 @@ function ParamInput() {
         <Typography variant="h5" id="graph-title">
           Your Carbon Footprint
         </Typography>
-        <Graph data={data} />{" "}
+        <Graph data={data} average={selectedCountry} />{" "}
       </Paper>
       <Paper elevation={3} className="flavour-text-container">
         <Typography variant="p" id="flavour-text">
@@ -201,8 +198,15 @@ function ParamInput() {
           <br />
         </Typography>
         <Typography variant="p" id="flavour-text">
-          It will take <span id="emphasis"> ${totalTrees * 120} </span> to
+          It will take{" "}
+          <span id="emphasis"> ${totalTrees * 120 + totalTrees * 12} </span> to
           offset your carbon footprint
+          <br />
+          Purchase costs at $120 per tree:{" "}
+          <span id="emphasis"> ${totalTrees * 120} </span>
+          <br />
+          Maintenance costs at $12 per tree:{" "}
+          <span id="emphasis"> ${totalTrees * 12} </span>
         </Typography>
       </Paper>
     </>
