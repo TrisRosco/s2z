@@ -61,8 +61,17 @@ function ParamInput() {
 
   const handleDeleteLine = (id) => {
     const updatedLines = lines.filter((line) => line.id !== id);
-    setLines(updatedLines);
+  
+    const updatedLinesWithIDs = updatedLines.map((line, index) => {
+      return {
+        ...line,
+        id: index + 1,
+      };
+    });
+  
+    setLines(updatedLinesWithIDs);
   };
+  
 
   const handleLineChange = (id, key, value) => {
     const updatedLines = lines.map((line) =>
