@@ -13,40 +13,33 @@ import {
   TextField,
   IconButton,
   Paper,
+  Typography,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
-import { DateField } from "@mui/x-date-pickers/DateField";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 import Graph from "../Graph";
 
 function ParamInput() {
   const [lineCount, setLineCount] = useState(1);
+  const [totalTrees, setTotalTrees] = useState(0);
   const [lines, setLines] = useState([
     { id: 1, monthYear: null, numTrees: "" },
   ]);
 
-  const [data, setData] = useState([
-    { date: "05/2021", trees: 400 },
-    { date: "06/2021", trees: 500 },
-    { date: "07/2021", trees: 300 },
-    { date: "08/2021", trees: 600 },
-  ]);
+  const [data, setData] = useState([]);
 
   // Maths
   // On average, a fully grown tree can absorb approximately 48 pounds (21.77 kilograms) of CO2 per year. However, this number can vary significantly.
   // for each tree in the data, multiply the number of trees by 48 to get the amount of CO2 absorbed per year
 
   // 1 tree = 21.77 kilograms of CO2 per year
-  // 21.77 / 12 = 1.814 
+  // 21.77 / 12 = 1.814
   // 1 tree = 1.814 kilograms of CO2 per month
-  // 1.814 / 30 = 0.06046 
+  // 1.814 / 30 = 0.06046
   // 1 tree = 0.06046 kilograms of CO2 per day
-  // 0.06046 * 7 = 0.42322 
+  // 0.06046 * 7 = 0.42322
   // 1 tree = 0.42322 kilograms of CO2 per week
-
 
   const processData = () => {
     const newData = [];
@@ -59,6 +52,13 @@ function ParamInput() {
       }
     });
     setData(newData);
+    handleTotalTrees();
+  };
+
+  // valid date mm/yy
+  const validateDate = (date) => {
+    const dateRegex = /^(0[1-9]|1[0-2])\/?([0-9]{4}|[0-9]{2})$/;
+    return dateRegex.test(date);
   };
 
   const handleAddLine = () => {
@@ -80,6 +80,17 @@ function ParamInput() {
     setLines(updatedLinesWithIDs);
   };
 
+  const handleTotalTrees = () => {
+    let total = 0;
+    lines.forEach((line) => {
+      if (line.numTrees) {
+        total += parseInt(line.numTrees);
+      }
+    });
+    setTotalTrees(total);
+  };
+
+
   const handleLineChange = (id, key, value) => {
     const updatedLines = lines.map((line) =>
       line.id === id ? { ...line, [key]: value } : line
@@ -93,18 +104,34 @@ function ParamInput() {
         <ListItem>
           <ListItemText primary={line.id} />
           <TextField
+            error={!validateDate(line.monthYear)}
             id={`month-year-${line.id}`}
             label="Month & Year"
-            variant="standard"
+            variant="filled"
+            inputProps={{ maxLength: 4 }}
             value={line.monthYear}
+            placeholder="MM/YY"
+            onBlur={(e) => {
+              const input = e.target;
+              let value = input.value;
+
+              if (/^\d{4}$/.test(value)) {
+                value = value.replace(/(\d{2})(\d{2})/, "$1/$2");
+              }
+              input.value = value;
+              handleLineChange(line.id, "monthYear", value);
+            }}
             onChange={(e) =>
               handleLineChange(line.id, "monthYear", e.target.value)
             }
           />
+
           <TextField
             id={`num-trees-${line.id}`}
             label="Number of Trees"
-            variant="standard"
+            variant="filled"
+            inputProps={{ maxLength: 2 }}
+            type="number"
             value={line.numTrees}
             onChange={(e) =>
               handleLineChange(line.id, "numTrees", e.target.value)
@@ -162,7 +189,17 @@ function ParamInput() {
           <span>Update Graph</span>
         </Button>
       </Paper>
-      <Graph data={data} />
+      <Graph data={data} />{" "}
+      <Paper elevation={3} className="flavour-text-container">
+        <Typography variant="p" id="flavour-text">
+          Total number of trees: <span id="emphasis"> {totalTrees} </span>
+          <br />
+        </Typography>
+        <Typography variant="p" id="flavour-text">
+          It will take <span id="emphasis"> ${totalTrees * 120} </span> to
+          offset your carbon footprint
+        </Typography>
+      </Paper>
     </>
   );
 }

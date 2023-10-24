@@ -6,3 +6,10 @@
     --LinearGreen: linear-gradient(to right, rgb(173, 215, 192), rgb(93, 166, 148));
 }
   
+.graph{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
