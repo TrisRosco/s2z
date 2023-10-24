@@ -19,13 +19,12 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 import Graph from "../Graph";
-import { ThemeProvider } from "@emotion/react";
 
 function ParamInput() {
   const [lineCount, setLineCount] = useState(1);
   const [totalTrees, setTotalTrees] = useState(2);
   const [selectedCountry, setSelectedCountry] = useState(15.52);
-  const [selectedFrequency, setSelectedFrequency] = useState("Anually");
+  const [selectedFrequency, setSelectedFrequency] = useState(2);
   const [lines, setLines] = useState([
     { id: 1, monthYear: null, numTrees: "" },
   ]);
@@ -107,17 +106,41 @@ function ParamInput() {
           <TextField
             error={!validateDate(line.monthYear)}
             id={`month-year-${line.id}`}
-            label="Month & Year"
+            label={
+              selectedFrequency === 0
+                ? "Date"
+                : selectedFrequency === 1
+                ? "Month/Year"
+                : selectedFrequency === 2
+                ? "Year"
+                : ""
+            }
             variant="filled"
-            inputProps={{ maxLength: 4 }}
+            inputProps={
+              selectedFrequency === 0
+                ? { maxLength: 6 }
+                : selectedFrequency === 1
+                ? { maxLength: 4 }
+                : selectedFrequency === 2
+                ? { maxLength: 2 }
+                : {}
+            }
             value={line.monthYear}
-            placeholder="MM/YY"
+            placeholder={
+              selectedFrequency === 0
+                ? "DD/MM/YY"
+                : selectedFrequency === 1
+                ? "MM/YY"
+                : selectedFrequency === 2
+                ? "YY"
+                : ""
+            }
             onBlur={(e) => {
               const input = e.target;
               let value = input.value;
 
               if (/^\d{4}$/.test(value)) {
-                value = value.replace(/(\d{2})(\d{2})/, "$1/$2");
+                value = value.replace(/^(\d{2})(\d{2})$/, "$1/$2");
               }
               input.value = value;
               handleLineChange(line.id, "monthYear", value);
@@ -177,7 +200,8 @@ function ParamInput() {
               label="Frequency"
               onChange={handleSelectFrequency}
             >
-              <MenuItem value={0}>Weekly</MenuItem>
+              {/* disabled weekly option for now */}
+              {/* <MenuItem value={0}>Weekly</MenuItem> */}
               <MenuItem value={1}>Monthly</MenuItem>
               <MenuItem value={2}>Annually</MenuItem>
             </Select>
