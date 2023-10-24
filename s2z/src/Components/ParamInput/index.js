@@ -19,6 +19,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 import Graph from "../Graph";
+import { ThemeProvider } from "@emotion/react";
 
 function ParamInput() {
   const [lineCount, setLineCount] = useState(1);
@@ -163,7 +164,7 @@ function ParamInput() {
               <MenuItem value={1710}>Australia</MenuItem>
             </Select>
           </FormControl>
-          <FormControl variant="filled">
+          <FormControl variant="filled" >
             <InputLabel>Frequency</InputLabel>
             <Select className="selector" label="Frequency">
               <MenuItem value={0}>Weekly</MenuItem>
@@ -191,12 +192,15 @@ function ParamInput() {
           <span>Update Graph</span>
         </Button>
       </Paper>
+      <Typography variant="h4" className="subtitle">
+        Your Carbon Offset Progress
+      </Typography>
       <Paper elevation={3} className="graph-container">
-        <Typography variant="h5" id="graph-title">
-          Your Carbon Footprint
-        </Typography>
-        <Graph data={data} average={selectedCountry} />{" "}
+        <Graph data={data} average={selectedCountry} />
       </Paper>
+      <Typography variant="h4">
+        Facts and Figures
+      </Typography>
       <Paper elevation={3} className="flavour-text-container">
         <Typography variant="p" id="flavour-text">
           Total number of trees: <span id="emphasis"> {totalTrees} </span>
@@ -212,6 +216,15 @@ function ParamInput() {
           <br />
           Maintenance costs at $12 per tree:{" "}
           <span id="emphasis"> ${totalTrees * 12} </span>
+        </Typography>
+        <Typography variant="p" id="flavour-text">
+          <br />
+          Average carbon footprint for your country:{" "}
+          <span id="emphasis"> {selectedCountry}</span>kgCO2 per person per year
+          <br />
+          It will take a total of
+          <span id="emphasis"> {Math.ceil(selectedCountry / 28.5)} </span> trees
+          to offset your carbon footprint
         </Typography>
       </Paper>
     </>
