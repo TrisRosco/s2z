@@ -19,7 +19,6 @@ import AddIcon from "@mui/icons-material/Add";
 import { DateField } from "@mui/x-date-pickers/DateField";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import utc from 'dayjs/plugin/utc'
 import AutoGraphIcon from "@mui/icons-material/AutoGraph";
 import Graph from "../Graph";
 
@@ -36,20 +35,31 @@ function ParamInput() {
     { date: "08/2021", trees: 600 },
   ]);
 
-  // set data to whatever is passed in from the input fields
+  // Maths
+  // On average, a fully grown tree can absorb approximately 48 pounds (21.77 kilograms) of CO2 per year. However, this number can vary significantly.
+  // for each tree in the data, multiply the number of trees by 48 to get the amount of CO2 absorbed per year
+
+  // 1 tree = 21.77 kilograms of CO2 per year
+  // 21.77 / 12 = 1.814 
+  // 1 tree = 1.814 kilograms of CO2 per month
+  // 1.814 / 30 = 0.06046 
+  // 1 tree = 0.06046 kilograms of CO2 per day
+  // 0.06046 * 7 = 0.42322 
+  // 1 tree = 0.42322 kilograms of CO2 per week
+
+
   const processData = () => {
     const newData = [];
     lines.forEach((line) => {
       if (line.monthYear && line.numTrees) {
         const month = line.monthYear;
-        const year = line.monthYear;
+        const year = line.monthYear
         const date = `${month}/${year}`;
-        const trees = line.numTrees;
+        const trees = (line.numTrees * 1.814).toFixed(2);
         newData.push({ date, trees });
         console.log(date, trees);
       }
     });
-
     setData(newData);
   };
 
@@ -61,17 +71,16 @@ function ParamInput() {
 
   const handleDeleteLine = (id) => {
     const updatedLines = lines.filter((line) => line.id !== id);
-  
+
     const updatedLinesWithIDs = updatedLines.map((line, index) => {
       return {
         ...line,
         id: index + 1,
       };
     });
-  
+
     setLines(updatedLinesWithIDs);
   };
-  
 
   const handleLineChange = (id, key, value) => {
     const updatedLines = lines.map((line) =>
