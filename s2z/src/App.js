@@ -1,10 +1,11 @@
 import "./App.css";
-import React, { useState } from "react";
+import React from "react";
 import ParamInput from "./Components/ParamInput";
-// import Graph from "./Components/Graph";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Typography } from "@mui/material";
 
+
+// A custom MUI theme based on Switch2Zero's brand colors
 const theme = createTheme({
   palette: {
     type: "light",

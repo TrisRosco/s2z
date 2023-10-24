@@ -31,6 +31,7 @@ function ParamInput() {
 
   const [data, setData] = useState([]);
 
+  // Handles the data from the input fields and processes it into a format that can be used by the graph
   const processData = () => {
     const newData = [];
     let carbonFootprint = 0;
@@ -46,6 +47,7 @@ function ParamInput() {
     handleTotalTrees();
   };
 
+  // Validates the date input field based on the frequency selected, then sets the error state of the input field
   const validateDate = (date) => {
     if (date === null) {
       return true;
@@ -59,12 +61,14 @@ function ParamInput() {
     }
   };
 
+  // Adds a new line of input fields
   const handleAddLine = () => {
     const newLineCount = lineCount + 1;
     setLineCount(newLineCount);
     setLines([...lines, { id: newLineCount, monthYear: null, numTrees: "" }]);
   };
 
+  // Deletes a line of input fields and updates the line IDs to be sequential again
   const handleDeleteLine = (id) => {
     const updatedLines = lines.filter((line) => line.id !== id);
 
@@ -78,6 +82,7 @@ function ParamInput() {
     setLines(updatedLinesWithIDs);
   };
 
+  // Calculates the total number of trees inputted by the user and updates the state
   const handleTotalTrees = () => {
     let total = 0;
     lines.forEach((line) => {
@@ -88,6 +93,7 @@ function ParamInput() {
     setTotalTrees(total);
   };
 
+  // Updates the state of the input fields
   const handleLineChange = (id, key, value) => {
     const updatedLines = lines.map((line) =>
       line.id === id ? { ...line, [key]: value } : line
@@ -95,6 +101,7 @@ function ParamInput() {
     setLines(updatedLines);
   };
 
+  // Select handlers
   const handleSelectCountry = (e) => {
     setSelectedCountry(e.target.value);
     console.log(e.target.value);
@@ -105,15 +112,17 @@ function ParamInput() {
     console.log(e.target.value);
   };
 
+  // Handles the JSX for the input fields
   const renderLines = () => {
     return lines.map((line) => (
       <div key={line.id}>
         <ListItem>
-          <ListItemText primary={line.id} />
+          <ListItemText primary={line.id} /> {/* Line number */}
           <TextField
             error={!validateDate(line.monthYear)}
             id={`month-year-${line.id}`}
             label={
+              // Label for the date input field based on the frequency selected
               selectedFrequency === 0
                 ? "Date"
                 : selectedFrequency === 1
@@ -124,6 +133,7 @@ function ParamInput() {
             }
             variant="filled"
             inputProps={
+              // Max length of the date input field based on the frequency selected
               selectedFrequency === 0
                 ? { maxLength: 6 }
                 : selectedFrequency === 1
@@ -134,6 +144,7 @@ function ParamInput() {
             }
             value={line.monthYear}
             placeholder={
+              // Placeholder for the date input field based on the frequency selected
               selectedFrequency === 0
                 ? "DD/MM/YY"
                 : selectedFrequency === 1
@@ -143,6 +154,7 @@ function ParamInput() {
                 : ""
             }
             onBlur={(e) => {
+              // Formats the date input field based on the frequency selected when the user leaves the input field
               const input = e.target;
               let value = input.value;
 
@@ -161,12 +173,13 @@ function ParamInput() {
             label="Number of Trees"
             variant="filled"
             inputProps={{ maxLength: 2 }}
-            type="number"
+            type="number" // Only allows numbers to be inputted, and displays a number keyboard on mobile
             value={line.numTrees}
             onChange={(e) =>
               handleLineChange(line.id, "numTrees", e.target.value)
             }
           />
+          {/* Delete button */}
           <IconButton
             aria-label="delete"
             onClick={() => handleDeleteLine(line.id)}
@@ -174,83 +187,93 @@ function ParamInput() {
             <DeleteIcon />
           </IconButton>
         </ListItem>
+        {/* Divider between lines added if not the last line */}
         {line.id !== lineCount && <Divider />}
       </div>
     ));
   };
 
+  // Main JSX for the component
   return (
     <>
+      {/* Input section */}
       <Paper elevation={3}>
-        <Paper elevation={3}>
-          <FormControl variant="filled">
-            <InputLabel>Country</InputLabel>
-            <Select
-              className="selector"
-              label="Country"
-              onChange={handleSelectCountry}
-            >
-              <MenuItem value={1552}>United States</MenuItem>
-              <MenuItem value={555}>United Kingdom</MenuItem>
-              <MenuItem value={944}>Germany</MenuItem>
-              <MenuItem value={695}>South Africa</MenuItem>
-              <MenuItem value={191}>India</MenuItem>
-              <MenuItem value={738}>China</MenuItem>
-              <MenuItem value={856}>Singapore</MenuItem>
-              <MenuItem value={1710}>Australia</MenuItem>
-            </Select>
-          </FormControl>
-          <FormControl variant="filled">
-            <InputLabel>Frequency</InputLabel>
-            <Select
-              className="selector"
-              label="Frequency"
-              onChange={handleSelectFrequency}
-              defaultValue={1}
-              
-            >
-              {/* disabled weekly option for now */}
-              {/* <MenuItem value={0}>Weekly</MenuItem> */}
-              <MenuItem value={1}>Monthly</MenuItem>
-              <MenuItem value={2}>Annually</MenuItem>
-            </Select>
-          </FormControl>
-        </Paper>
+        {/* Country Selector */}
+        <FormControl variant="filled">
+          <InputLabel>Country</InputLabel>
+          <Select
+            className="selector"
+            label="Country"
+            onChange={handleSelectCountry}
+          >
+            <MenuItem value={1552}>United States</MenuItem>
+            <MenuItem value={555}>United Kingdom</MenuItem>
+            <MenuItem value={944}>Germany</MenuItem>
+            <MenuItem value={695}>South Africa</MenuItem>
+            <MenuItem value={191}>India</MenuItem>
+            <MenuItem value={738}>China</MenuItem>
+            <MenuItem value={856}>Singapore</MenuItem>
+            <MenuItem value={1710}>Australia</MenuItem>
+          </Select>
+        </FormControl>
+        {/* Frequency selector */}
+        <FormControl variant="filled">
+          <InputLabel>Frequency</InputLabel>
+          <Select
+            className="selector"
+            label="Frequency"
+            onChange={handleSelectFrequency}
+            defaultValue={1}
+          >
+            {/* disabled weekly option for now */}
+            {/* <MenuItem value={0}>Weekly</MenuItem> */}
+            <MenuItem value={1}>Monthly</MenuItem>
+            <MenuItem value={2}>Annually</MenuItem>
+          </Select>
+        </FormControl>
+        {/* Add line button */}
         <Table>{renderLines()}</Table>
         <Button
           id="add-line-button"
-          color="primary"
+          color="primary" // Uses the primary color from the theme
           startIcon={<AddIcon />}
           variant="outlined"
           onClick={handleAddLine}
         >
           <span>Add line</span>
         </Button>
+        {/* Update graph button */}
         <Button
-          color="secondary"
+          color="secondary" // Uses the secondary color from the theme
           startIcon={<AutoGraphIcon />}
-          variant="contained"
+          variant="contained" //Contained variant becuase it is the main action on the page
           onClick={processData}
         >
           <span>Update Graph</span>
         </Button>
       </Paper>
-      <Typography variant="h4" className="subtitle">
-        Your Carbon Offset Progress
+
+      {/* Graph section */}
+      <Typography variant="h4" id="subtitle">
+        Your Carbon Offset
       </Typography>
       <Paper elevation={3}>
         <Graph data={data} average={selectedCountry} />
       </Paper>
-      <Typography variant="h4">Facts and Figures</Typography>
+
+      {/* Facts and Figures section */}
+      <Typography variant="h4" id="subtitle">
+        Facts and Figures
+      </Typography>
       <Paper elevation={3}>
         <Typography variant="body1" id="flavour-text">
           Total number of trees: <span id="emphasis"> {totalTrees} </span>
           <br />
         </Typography>
         <Typography variant="body1" id="flavour-text">
-          It will take{" "}
-          <span id="emphasis"> ${totalTrees * 120 + totalTrees * 12} </span> to
-          offset your carbon footprint
+          It will cost{" "}
+          <span id="emphasis"> ${totalTrees * 120 + totalTrees * 12} </span> USD
+          to purchase and maintain these trees
           <br />
           Purchase costs at $120 per tree:{" "}
           <span id="emphasis"> ${totalTrees * 120} </span>
@@ -259,8 +282,7 @@ function ParamInput() {
           <span id="emphasis"> ${totalTrees * 12} </span>
         </Typography>
         <Typography variant="body1" id="flavour-text">
-          <br />
-          Average person's carbon footprint for your country:{" "}
+          Average person's carbon footprint in your country:{" "}
           <span id="emphasis"> {selectedCountry}</span>kgCO per year
           <br />
           It will take a total of
